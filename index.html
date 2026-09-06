@@ -5,15 +5,348 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Computational Sound Labs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #0c0e14;
+        --surface: #151922;
+        --surface-hover: #1c2230;
+        --border: rgba(255, 255, 255, 0.08);
+        --text: #eef1f8;
+        --muted: #8b93a7;
+        --accent: #6ee7b7;
+        --accent-dim: rgba(110, 231, 183, 0.15);
+        --shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+        --radius: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "DM Sans", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(ellipse 80% 50% at 50% -10%, rgba(110, 231, 183, 0.12), transparent),
+          radial-gradient(ellipse 60% 40% at 100% 100%, rgba(99, 102, 241, 0.1), transparent),
+          var(--bg);
+        line-height: 1.5;
+      }
+
+      .page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: var(--accent-dim);
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+      }
+
+      h1 {
+        font-family: "Fraunces", Georgia, serif;
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 600;
+        margin: 0 0 0.75rem;
+        letter-spacing: -0.02em;
+      }
+
+      .subtitle {
+        max-width: 36rem;
+        margin: 0 auto;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .lab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+        gap: 1.5rem;
+      }
+
+      .lab-card {
+        display: flex;
+        flex-direction: column;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .lab-card:hover,
+      .lab-card:focus-visible {
+        transform: translateY(-4px);
+        border-color: rgba(110, 231, 183, 0.35);
+        background: var(--surface-hover);
+        outline: none;
+      }
+
+      .lab-card:focus-visible {
+        box-shadow: var(--shadow), 0 0 0 3px var(--accent-dim);
+      }
+
+      .preview-wrap {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        background: #0a0c10;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .preview-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 55%, rgba(21, 25, 34, 0.85));
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .preview-frame {
+        width: 400%;
+        height: 400%;
+        border: 0;
+        transform: scale(0.25);
+        transform-origin: 0 0;
+        pointer-events: none;
+        background: #fff;
+      }
+
+      .preview-placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #1a1f2e 0%, #12151c 100%);
+        z-index: 1;
+      }
+
+      .preview-placeholder.hidden {
+        display: none;
+      }
+
+      .preview-placeholder span:first-child {
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 2.5rem;
+        font-weight: 600;
+        opacity: 0.25;
+        line-height: 1;
+      }
+
+      .preview-placeholder span:last-child {
+        font-size: 0.8rem;
+        color: var(--muted);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .preview-badge {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        z-index: 3;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text);
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(8px);
+        padding: 0.3rem 0.65rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+      }
+
+      .card-body {
+        padding: 1.25rem 1.35rem 1.35rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-body h2 {
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem;
+        letter-spacing: -0.01em;
+      }
+
+      .card-body p {
+        margin: 0 0 1rem;
+        color: var(--muted);
+        font-size: 0.92rem;
+        flex: 1;
+      }
+
+      .open-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--accent);
+      }
+
+      .open-link svg {
+        width: 1rem;
+        height: 1rem;
+        transition: transform 0.2s ease;
+      }
+
+      .lab-card:hover .open-link svg,
+      .lab-card:focus-visible .open-link svg {
+        transform: translate(2px, -2px);
+      }
+
+      footer {
+        margin-top: 3rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
   </head>
   <body>
-    <h1>Computational Sound Labs</h1>
-    <ul>
-      <li><a href="https://angelj-apps.github.io/lab1_kb/" target="_blank">Lab 1: WebAudio Keyboard</a></li>
-      <li><a href="https://angelj-apps.github.io/lab2_synth/" target="_blank">Lab 2: Multi-Mode Synth</a></li>
-      <li><a href="https://angelj-apps.github.io/lab3/" target="_blank">Lab 3: Babbling Brook and Bell</a></li>
-      <li><a href="https://angelj-apps.github.io/Lab4Part1/" target="_blank">Lab 4: Live Coding Language</a></li>
-      <li><a href="https://angelj-apps.github.io/lab5/" target="_blank">Lab 5: Markov Chain Composition</a></li>
-    </ul>
+    <div class="page">
+      <header>
+        <span class="eyebrow">Web Audio · Synthesis · Composition</span>
+        <h1>Computational Sound Labs</h1>
+        <p class="subtitle">
+          A collection of browser-based audio projects — from keyboard synths and multi-mode synthesis
+          to live coding and Markov chain composition.
+        </p>
+      </header>
+
+      <main class="lab-grid">
+        <a class="lab-card" href="https://angelj-apps.github.io/lab1_kb/" target="_blank" rel="noopener noreferrer" data-preview="https://angelj-apps.github.io/lab1_kb/">
+          <div class="preview-wrap">
+            <span class="preview-badge">Lab 1</span>
+            <div class="preview-placeholder"><span>01</span><span>Preview</span></div>
+            <iframe class="preview-frame" title="Preview of Lab 1" loading="lazy" tabindex="-1"></iframe>
+          </div>
+          <div class="card-body">
+            <h2>WebAudio Keyboard</h2>
+            <p>Playable keyboard with sine and sawtooth waves. Notes paint the background, with an occasional shimmer fifth.</p>
+            <span class="open-link">Open project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
+          </div>
+        </a>
+
+        <a class="lab-card" href="https://angelj-apps.github.io/lab2_synth/" target="_blank" rel="noopener noreferrer" data-preview="https://angelj-apps.github.io/lab2_synth/">
+          <div class="preview-wrap">
+            <span class="preview-badge">Lab 2</span>
+            <div class="preview-placeholder"><span>02</span><span>Preview</span></div>
+            <iframe class="preview-frame" title="Preview of Lab 2" loading="lazy" tabindex="-1"></iframe>
+          </div>
+          <div class="card-body">
+            <h2>Multi-Mode Synth</h2>
+            <p>Additive, AM, FM, and hybrid synthesis with LFO vibrato, ADSR envelopes, and keyboard mapping.</p>
+            <span class="open-link">Open project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
+          </div>
+        </a>
+
+        <a class="lab-card" href="https://angelj-apps.github.io/lab3/" target="_blank" rel="noopener noreferrer" data-preview="https://angelj-apps.github.io/lab3/">
+          <div class="preview-wrap">
+            <span class="preview-badge">Lab 3</span>
+            <div class="preview-placeholder"><span>03</span><span>Preview</span></div>
+            <iframe class="preview-frame" title="Preview of Lab 3" loading="lazy" tabindex="-1"></iframe>
+          </div>
+          <div class="card-body">
+            <h2>Babbling Brook &amp; Bell</h2>
+            <p>Filtered brown noise for flowing water, plus additive bell synthesis with percussive strike and decay.</p>
+            <span class="open-link">Open project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
+          </div>
+        </a>
+
+        <a class="lab-card" href="https://angelj-apps.github.io/Lab4Part1/" target="_blank" rel="noopener noreferrer" data-preview="https://angelj-apps.github.io/Lab4Part1/">
+          <div class="preview-wrap">
+            <span class="preview-badge">Lab 4</span>
+            <div class="preview-placeholder"><span>04</span><span>Preview</span></div>
+            <iframe class="preview-frame" title="Preview of Lab 4" loading="lazy" tabindex="-1"></iframe>
+          </div>
+          <div class="card-body">
+            <h2>Live Coding Language</h2>
+            <p>A minimal command-based live coding engine for rhythmic patterns with repeat blocks and re-evaluation.</p>
+            <span class="open-link">Open project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
+          </div>
+        </a>
+
+        <a class="lab-card" href="https://angelj-apps.github.io/lab5/" target="_blank" rel="noopener noreferrer" data-preview="https://angelj-apps.github.io/lab5/">
+          <div class="preview-wrap">
+            <span class="preview-badge">Lab 5</span>
+            <div class="preview-placeholder"><span>05</span><span>Preview</span></div>
+            <iframe class="preview-frame" title="Preview of Lab 5" loading="lazy" tabindex="-1"></iframe>
+          </div>
+          <div class="card-body">
+            <h2>Markov Chain Composition</h2>
+            <p>Train an n-th order Markov chain on a melody, generate a continuation, and visualize it on a piano roll.</p>
+            <span class="open-link">Open project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
+          </div>
+        </a>
+      </main>
+
+      <footer>
+        <p>Built with the Web Audio API · <a href="https://github.com/angelj-apps">angelj-apps</a> on GitHub</p>
+      </footer>
+    </div>
+
+    <script>
+      document.querySelectorAll(".lab-card").forEach(function (card) {
+        var url = card.dataset.preview;
+        var iframe = card.querySelector(".preview-frame");
+        var placeholder = card.querySelector(".preview-placeholder");
+        var label = placeholder.querySelector("span:last-child");
+
+        fetch(url, { method: "HEAD" })
+          .then(function (res) {
+            if (!res.ok) {
+              label.textContent = "Coming soon";
+              return;
+            }
+            iframe.src = url;
+            iframe.addEventListener("load", function () {
+              placeholder.classList.add("hidden");
+            }, { once: true });
+          })
+          .catch(function () {
+            label.textContent = "Coming soon";
+          });
+      });
+    </script>
   </body>
 </html>
