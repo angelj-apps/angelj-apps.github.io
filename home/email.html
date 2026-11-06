@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Email Angel J.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #1a1a1a;
+        --bg-elev: #222222;
+        --ink: #ececec;
+        --mute: #8a8a8a;
+        --line: #333333;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Figtree", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse 70% 45% at 50% 0%, #262626, transparent 60%),
+          var(--bg);
+        display: grid;
+        place-items: center;
+        padding: 2rem 1.25rem;
+      }
+
+      .card {
+        width: min(100%, 26rem);
+        background: var(--bg-elev);
+        border: 1px solid var(--line);
+        padding: 2rem 1.75rem;
+      }
+
+      h1 {
+        font-family: "Syne", system-ui, sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0 0 0.5rem;
+      }
+
+      .lede {
+        margin: 0 0 1.5rem;
+        color: var(--mute);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .subject {
+        margin: 0 0 1.5rem;
+        font-size: 0.82rem;
+        color: #cfcfcf;
+        word-break: break-word;
+      }
+
+      .subject strong {
+        display: block;
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--mute);
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+      }
+
+      .options {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+
+      .options a {
+        display: block;
+        text-decoration: none;
+        color: var(--ink);
+        border: 1px solid var(--line);
+        padding: 0.85rem 1rem;
+        font-weight: 600;
+        font-size: 0.92rem;
+        transition: border-color 0.25s ease, background 0.25s ease;
+      }
+
+      .options a:hover {
+        border-color: #555;
+        background: #2a2a2a;
+      }
+
+      .options a span {
+        display: block;
+        margin-top: 0.2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--mute);
+      }
+
+      .back {
+        display: inline-block;
+        margin-top: 1.5rem;
+        color: var(--mute);
+        text-decoration: none;
+        font-size: 0.8rem;
+      }
+
+      .back:hover { color: var(--ink); }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Send an email</h1>
+      <p class="lede">Pick how you want to open a compose window. This always works as its own page.</p>
+      <p class="subject">
+        <strong>Subject</strong>
+        <span id="subject-label">Hello</span>
+      </p>
+      <ul class="options">
+        <li>
+          <a id="link-mailto" href="#">
+            Mail app
+            <span>Apple Mail, Outlook, Thunderbird, etc.</span>
+          </a>
+        </li>
+        <li>
+          <a id="link-gmail" href="#" target="_blank" rel="noopener noreferrer">
+            Gmail in browser
+            <span>Opens a new tab</span>
+          </a>
+        </li>
+        <li>
+          <a id="link-outlook" href="#" target="_blank" rel="noopener noreferrer">
+            Outlook in browser
+            <span>Opens a new tab</span>
+          </a>
+        </li>
+      </ul>
+      <a class="back" href="./">← Back to portfolio</a>
+    </main>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var subject = params.get("subject") || "Hello";
+        var to = "angelj.apps@gmail.com";
+
+        document.getElementById("subject-label").textContent = subject;
+        document.title = "Email · " + subject;
+
+        document.getElementById("link-mailto").href =
+          "mailto:" + to + "?subject=" + encodeURIComponent(subject);
+
+        document.getElementById("link-gmail").href =
+          "https://mail.google.com/mail/?view=cm&fs=1&tf=1" +
+          "&to=" + encodeURIComponent(to) +
+          "&su=" + encodeURIComponent(subject);
+
+        document.getElementById("link-outlook").href =
+          "https://outlook.live.com/mail/0/deeplink/compose" +
+          "?to=" + encodeURIComponent(to) +
+          "&subject=" + encodeURIComponent(subject);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Angel J. — selected work.">
+    <title>Angel J.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #1a1a1a;
+        --bg-elev: #222222;
+        --ink: #ececec;
+        --mute: #8a8a8a;
+        --line: #333333;
+        --soft: #2a2a2a;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Figtree", system-ui, sans-serif;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.55;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse 70% 45% at 50% 0%, #262626, transparent 60%),
+          var(--bg);
+        display: grid;
+        place-items: center;
+        padding: clamp(2rem, 5vh, 4rem) clamp(1.25rem, 4vw, 3rem);
+      }
+
+      .card {
+        width: min(100%, 64rem);
+        background: var(--bg-elev);
+        border: 1px solid var(--line);
+        padding: clamp(2rem, 4vw, 3.5rem) clamp(1.75rem, 4vw, 3.75rem);
+      }
+
+      .card-grid {
+        display: grid;
+        gap: 2.5rem 4rem;
+      }
+
+      @media (min-width: 860px) {
+        .card-grid {
+          grid-template-columns: 1.1fr 0.9fr;
+          align-items: start;
+        }
+      }
+
+      .identity h1 {
+        font-family: "Syne", system-ui, sans-serif;
+        font-size: clamp(3rem, 6vw, 4.5rem);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        margin: 0 0 2.5rem;
+        color: var(--ink);
+      }
+
+      .lunch {
+        border-top: 1px solid var(--line);
+        padding-top: 1.35rem;
+        max-width: 26rem;
+      }
+
+      .lunch summary {
+        list-style: none;
+        cursor: pointer;
+        font-family: "Syne", system-ui, sans-serif;
+        font-weight: 600;
+        font-size: 1.05rem;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+        user-select: none;
+        transition: color 0.35s ease;
+      }
+
+      .lunch summary::-webkit-details-marker { display: none; }
+
+      .lunch summary .hint {
+        font-family: "Figtree", system-ui, sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--mute);
+        transition: color 0.35s ease, opacity 0.3s ease;
+      }
+
+      .lunch summary:hover { color: #fff; }
+      .lunch summary:hover .hint { color: #cfcfcf; }
+
+      .lunch[open] summary .hint { color: #cfcfcf; }
+      .lunch[open] summary .hint-open { display: none; }
+      .lunch:not([open]) summary .hint-close { display: none; }
+
+      .lunch-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition:
+          grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.4s ease;
+      }
+
+      .lunch[open] .lunch-panel {
+        grid-template-rows: 1fr;
+        opacity: 1;
+      }
+
+      .lunch-panel-inner {
+        overflow: hidden;
+        min-height: 0;
+      }
+
+      .lunch-body {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+        transform: translateY(-0.4rem);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .lunch[open] .lunch-body {
+        transform: translateY(0);
+      }
+
+      .lunch-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin: 0 0 0.75rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #b8b8b8;
+      }
+
+      .lunch-status::before {
+        content: "";
+        width: 0.45rem;
+        height: 0.45rem;
+        border-radius: 50%;
+        background: #6fbf7a;
+        box-shadow: 0 0 0 3px rgba(111, 191, 122, 0.18);
+      }
+
+      .lunch-body p {
+        margin: 0 0 1rem;
+        color: var(--mute);
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+
+      .lunch-body .subject-hint {
+        margin: 0 0 1.1rem;
+        font-size: 0.88rem;
+        color: #cfcfcf;
+      }
+
+      .lunch-body .subject-hint code {
+        font-family: "Figtree", system-ui, sans-serif;
+        font-size: 0.84rem;
+        color: var(--ink);
+        background: var(--soft);
+        border: 1px solid var(--line);
+        padding: 0.15rem 0.4rem;
+      }
+
+      .lunch-mail {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--bg);
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        padding: 0.65rem 1rem;
+        transition: background 0.35s ease, color 0.35s ease;
+      }
+
+      .lunch-mail:hover {
+        background: transparent;
+        color: var(--ink);
+      }
+
+      .col-right {
+        display: flex;
+        flex-direction: column;
+        gap: 2.25rem;
+        padding-top: 0.35rem;
+      }
+
+      @media (min-width: 860px) {
+        .col-right {
+          border-left: 1px solid var(--line);
+          padding-left: 3rem;
+        }
+      }
+
+      .label {
+        margin: 0 0 0.9rem;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--mute);
+      }
+
+      .projects {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .projects a {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1.25rem;
+        padding: 0.85rem 0;
+        text-decoration: none;
+        color: var(--ink);
+        border-bottom: 1px solid var(--line);
+        transition:
+          color 0.4s ease,
+          padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.35s ease;
+      }
+
+      .projects li:first-child a { border-top: 1px solid var(--line); }
+
+      .projects a:hover {
+        color: #fff;
+        padding-left: 0.45rem;
+      }
+
+      .projects .name {
+        font-weight: 500;
+        font-size: 1.05rem;
+        transition: letter-spacing 0.4s ease;
+      }
+
+      .projects a:hover .name {
+        letter-spacing: 0.01em;
+      }
+
+      .projects .meta {
+        font-size: 0.8rem;
+        color: var(--mute);
+        white-space: nowrap;
+        transition: color 0.4s ease;
+      }
+
+      .projects a:hover .meta { color: #b0b0b0; }
+
+      .contact {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.85rem;
+      }
+
+      .contact a {
+        color: #cfcfcf;
+        text-decoration: none;
+        display: grid;
+        place-items: center;
+        width: 2.35rem;
+        height: 2.35rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        transition:
+          color 0.35s ease,
+          border-color 0.35s ease,
+          background 0.35s ease,
+          transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .contact a:hover {
+        color: #fff;
+        border-color: #555;
+        background: #2c2c2c;
+        transform: translateY(-2px);
+      }
+
+      .contact svg {
+        width: 1.05rem;
+        height: 1.05rem;
+        fill: currentColor;
+        display: block;
+      }
+
+      .foot {
+        margin-top: 2.75rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        font-size: 0.75rem;
+        color: var(--mute);
+      }
+
+      .foot a {
+        color: var(--mute);
+        text-decoration: none;
+        transition: color 0.35s ease;
+      }
+
+      .foot a:hover { color: var(--ink); }
+
+      :focus-visible {
+        outline: 1px solid #fff;
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 520px) {
+        .projects a { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .lunch-panel,
+        .lunch-body,
+        .lunch summary,
+        .lunch summary .hint,
+        .projects a,
+        .projects .name,
+        .projects .meta,
+        .contact a,
+        .foot a,
+        .lunch-mail {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card" aria-label="Angel J. portfolio">
+      <div class="card-grid">
+        <section class="identity">
+          <h1>Angelique J.</h1>
+
+          <details class="lunch" id="lunch">
+            <summary>
+              Need a free lunch?
+              <span class="hint">
+                <span class="hint-open">Open</span>
+                <span class="hint-close">Close</span>
+              </span>
+            </summary>
+            <div class="lunch-panel">
+              <div class="lunch-panel-inner">
+                <div class="lunch-body">
+                  <p class="lunch-status">Currently accepting submissions</p>
+                  <p>
+                    Need a small favor or wanna see what I can do for you? Ask away!
+                    Happy to do a favor for free when I can.
+                  </p>
+                  <p class="subject-hint">
+                    Feel free to email me to make your request with the subject
+                    <code>Free Lunch Request - [Your Name]</code>!
+                  </p>
+                  <a
+                    class="lunch-mail"
+                    href="./email.html?subject=Free%20Lunch%20Request%20-%20%5BYour%20Name%5D"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >Email me</a>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <div class="col-right">
+          <section aria-labelledby="work-label">
+            <p class="label" id="work-label">Selected work</p>
+            <ul class="projects">
+              <li>
+                <a href="./projects/little-tools/">
+                  <span class="name">Little Tools</span>
+                  <span class="meta"> AI Personalized Python Learning App</span>
+                </a>
+              </li>
+              <li>
+                <a href="./projects/groovebox/">
+                  <span class="name">Garden Groovebox</span>
+                  <span class="meta">Web Audio</span>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="contact-label">
+            <p class="label" id="contact-label">Contact</p>
+            <ul class="contact">
+              <li>
+                <a href="./email.html" target="_blank" rel="noopener noreferrer" aria-label="Email Angel J.">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/angelj-apps" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .3C5.37.3 0 5.67 0 12.3c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.28-.01-1.03-.02-2.02-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23.96-.27 1.98-.4 3-.4s2.04.13 3 .4c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.65-5.48 5.95.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.57 22.1 24 17.6 24 12.3 24 5.67 18.63.3 12 .3z"/>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/angelj-apps" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.23 0z"/>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <div class="foot">
+        <a href="../">Labs</a>
+        <a href="https://github.com/angelj-apps/angelj-apps.github.io">Source</a>
+      </div>
+    </main>
+    <script>
+      (function () {
+        var details = document.getElementById("lunch");
+        var panel = details && details.querySelector(".lunch-panel");
+        var summary = details && details.querySelector("summary");
+        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (details && panel && summary) {
+          summary.addEventListener("click", function (e) {
+            e.preventDefault();
+            if (reduceMotion) {
+              details.open = !details.open;
+              return;
+            }
+
+            if (details.open) {
+              panel.style.gridTemplateRows = "1fr";
+              panel.style.opacity = "1";
+              // force reflow so the close transition runs
+              void panel.offsetHeight;
+              panel.style.gridTemplateRows = "0fr";
+              panel.style.opacity = "0";
+
+              var onClose = function (ev) {
+                if (ev.target !== panel || ev.propertyName !== "grid-template-rows") return;
+                panel.removeEventListener("transitionend", onClose);
+                details.open = false;
+                panel.style.gridTemplateRows = "";
+                panel.style.opacity = "";
+              };
+              panel.addEventListener("transitionend", onClose);
+            } else {
+              details.open = true;
+              panel.style.gridTemplateRows = "0fr";
+              panel.style.opacity = "0";
+              void panel.offsetHeight;
+              requestAnimationFrame(function () {
+                panel.style.gridTemplateRows = "1fr";
+                panel.style.opacity = "1";
+              });
+
+              var onOpen = function (ev) {
+                if (ev.target !== panel || ev.propertyName !== "grid-template-rows") return;
+                panel.removeEventListener("transitionend", onOpen);
+                panel.style.gridTemplateRows = "";
+                panel.style.opacity = "";
+              };
+              panel.addEventListener("transitionend", onOpen);
+            }
+          });
+        }
+
+      })();
+    </script>
+  </body>
+</html>

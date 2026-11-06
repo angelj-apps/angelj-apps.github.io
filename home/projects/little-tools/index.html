@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Little Tools · Angel J.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared.css?v=syne">
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <a class="mark" href="../../">Angel J.</a>
+        <a href="../../">← Back</a>
+      </div>
+
+      <article class="card">
+        <p class="crumb"><a href="../../">Work</a> · 01</p>
+
+        <header class="project-hero">
+          <span class="kicker">GenUI · COMS6998 · hw1</span>
+          <h1>Little Tools</h1>
+          <p class="lede">
+            A compact shelf of useful utilities — simple inputs, immediate outputs,
+            no noise.
+          </p>
+        </header>
+
+        <hr class="rule">
+
+        <div class="meta-row">
+          <span><strong>Time</strong> ~3–4 weeks</span>
+          <span><strong>Role</strong> Solo</span>
+          <span><strong>Stack</strong> Next.js · Vercel</span>
+        </div>
+
+        <div class="preview-frame-wrap">
+          <div class="preview-fallback" id="lt-fallback">Little Tools</div>
+          <iframe id="lt-frame" title="Preview of Little Tools" loading="lazy" tabindex="-1" hidden></iframe>
+        </div>
+
+        <section class="panel">
+          <h2>Goal</h2>
+          <p>
+            Ship a signed-in product of focused utilities (live at
+            <a href="https://genaihelloworld.vercel.app/" target="_blank" rel="noopener noreferrer">genaihelloworld.vercel.app</a>).
+            Google login gates the shelf; each tool stays small and purposeful.
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>Architecture</h2>
+          <pre class="arch">genaihelloworld.vercel.app
+  ├─ /login → Google auth
+  ├─ App shell → tool shelf
+  └─ Supabase (shared with admin)
+
+Deploy: Vercel</pre>
+        </section>
+
+        <div class="actions">
+          <a href="https://genaihelloworld.vercel.app/" target="_blank" rel="noopener noreferrer">Live app ↗</a>
+          <a href="https://github.com/angelj-apps/gen_ai_hello_world" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a href="../../">← Work</a>
+        </div>
+      </article>
+
+      <footer>
+        <a href="../../">Portfolio</a>
+      </footer>
+    </div>
+    <script>
+      (function () {
+        var frame = document.getElementById("lt-frame");
+        var fallback = document.getElementById("lt-fallback");
+        frame.hidden = false;
+        frame.src = "https://genaihelloworld.vercel.app/";
+        frame.addEventListener("load", function () {
+          fallback.style.display = "none";
+        }, { once: true });
+      })();
+    </script>
+  </body>
+</html>

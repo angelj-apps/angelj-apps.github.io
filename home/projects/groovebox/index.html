@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Garden Groovebox · Angel J.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared.css?v=syne">
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <a class="mark" href="../../">Angel J.</a>
+        <a href="../../">← Back</a>
+      </div>
+
+      <article class="card">
+        <p class="crumb"><a href="../../">Work</a> · 02</p>
+
+        <header class="project-hero">
+          <span class="kicker">Web Audio · course final</span>
+          <h1>Garden Groovebox</h1>
+          <p class="lede">
+            A performable FM instrument — sequencing, generative structure, and a
+            garden that listens back.
+          </p>
+        </header>
+
+        <hr class="rule">
+
+        <div class="meta-row">
+          <span><strong>Time</strong> ~25 hours</span>
+          <span><strong>Role</strong> Solo</span>
+          <span><strong>Stack</strong> Web Audio API</span>
+        </div>
+
+        <div class="preview-frame-wrap">
+          <div class="preview-fallback" id="gb-fallback">Garden Groovebox</div>
+          <iframe id="gb-frame" title="Preview of Garden Groovebox" loading="lazy" tabindex="-1" hidden></iframe>
+        </div>
+
+        <section class="panel">
+          <h2>Goal</h2>
+          <p>
+            Ship a one-tab performance instrument: step editing, live FM control,
+            generative mutate under musical constraints, and audiovisual feedback
+            that makes the system feel legible.
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>Architecture</h2>
+          <pre class="arch">UI → Scheduler → FM voice graph
+  ├─ Generator (scale-constrained)
+  ├─ Living garden / score
+  └─ Climate clock</pre>
+        </section>
+
+        <div class="actions">
+          <a href="https://angelj-apps.github.io/CompSoundFinal/" target="_blank" rel="noopener noreferrer">Live demo ↗</a>
+          <a href="https://github.com/angelj-apps/CompSoundFinal" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a href="../../">← Work</a>
+        </div>
+      </article>
+
+      <footer>
+        <a href="../../">Portfolio</a>
+      </footer>
+    </div>
+    <script>
+      (function () {
+        var frame = document.getElementById("gb-frame");
+        var fallback = document.getElementById("gb-fallback");
+        frame.hidden = false;
+        frame.src = "https://angelj-apps.github.io/CompSoundFinal/";
+        frame.addEventListener("load", function () {
+          fallback.style.display = "none";
+        }, { once: true });
+      })();
+    </script>
+  </body>
+</html>
